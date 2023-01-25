@@ -1,0 +1,32 @@
+name: Docker Image
+
+on:
+  push:
+    branches: [ "*" ]
+  pull_request:
+    branches: [ "main", "development" ]
+
+env:
+  CONTAINER_NAME: webscraping-elasticsearch   # set this to the name of the container in the
+                                              # containerDefinitions section of your task definition
+  DEP_PATH: requirements.txt
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build Containers
+      run: |
+        docker-compose -f docker-compose.yml build
+    - name: Run Tests
+      run: |
+        docker-compose -f docker-compose.yml run app python -m unittest discover -s app
