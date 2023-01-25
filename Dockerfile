@@ -15,8 +15,6 @@ RUN pip install -r requirements.txt
 # Set the working directory
 WORKDIR /app
 
-# Copy the application files
-COPY --chown=appuser . /app
 
 # Run the application
 CMD ["python", "app/app.py"]
